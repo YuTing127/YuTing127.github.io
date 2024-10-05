@@ -1,0 +1,53 @@
+/* 海洋風格主題 */
+.main-banner {
+    background-color: #A0D8EF; /* 淺藍色 */
+    padding: 100px 0;
+    text-align: center;
+    color: #003366; /* 深藍色 */
+}
+
+.section-banner {
+    background-color: #B3E5FC; /* 輕淡青色 */
+    padding: 50px 0;
+    text-align: center;
+    color: #004080; /* 深藍色 */
+}
+
+.content-frame {
+    background-color: #E1F5FE; /* 非常淡的藍色 */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: calc(100% - 20px); /* 比Banner窄20px */
+    margin: 0 auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 導覽列調整 */
+.navbar {
+    background-color: #B8E0F2; /* 淺藍色 */
+}
+
+.navbar-brand {
+    margin-left: 5px; /* 與視窗右側距離5px */
+    color: #003366;
+}
+
+.navbar-nav .nav-link {
+    color: #004080; /* 顯眼的深藍色 */
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #005f99; /* 中等藍色 */
+    color: #fff; /* 反白文字 */
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+.section {
+    padding-top: 70px;
+}
