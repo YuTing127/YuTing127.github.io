@@ -1,0 +1,94 @@
+div.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+#section0 div:first-child{
+    background-image: url("https://i.ytimg.com/vi/SG7psG_ouzg/maxresdefault.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#section01 div:first-child{
+    background-image: url("https://i.postimg.cc/9Xp1DyMW/0.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#section011 div:first-child{
+    background-image: url("https://img.gagaoolala.com/media/d64a5ba6-543881-lg.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#section02 div:first-child{
+    background-image: url("https://img.gagaoolala.com/media/90329f17-533596-lg.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#section021 div:first-child{
+    background-image: url("https://i.postimg.cc/fRJ3hSkW/image.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+
+#section1 div:first-child {
+    background-image: url("https://i.postimg.cc/bvRr8Yyw/1.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+#section2 div:first-child{
+background-image: url("https://i.postimg.cc/yxD8FFFD/2.jpg");
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+#section3 div:first-child{
+background-image: url("https://i.postimg.cc/QNF7g5Ng/3.jpg");
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+#section31 div:first-child{
+    background-image: url("https://i.postimg.cc/pVqYWxGr/image.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#section32 div:first-child{
+background-image: url("https://i.postimg.cc/V64MkBFp/image.jpg");
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+#section4 div:first-child{
+background-image: url("https://img.gagaoolala.com/media/e754a8c1-485160-lg.jpg");
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
