@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滾動播放影片的網頁</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            height: 200vh;
+            text-align: center;
+            color: white;
+        }
+
+        .leading {
+            background-color: #075316;
+        }
+
+        .middle {
+            background-color: #555;
+        }
+
+        .ending {
+            background-color: #222;
+            height: 100vh;
+        }
+
+        .video-section {
+            height: 300vh;
+            background-color: #666b2e;
+        }
+
+        .video-container {
+            height: 300vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .video-wrapper {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 300vh;
+            z-index: 2;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="section leading">
+        <h1>當人類不斷閹割大地時</h1>
+    </div>
+
+    <div class="video-section" id="video1-section">
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video id="video1" muted playsinline preload="auto">
+                    <source src="https://yuting127.github.io/video1.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <div class="section middle">
+        <h1>我們還能往哪走？</h1>
+    </div>
+
+    <div class="video-section" id="video2-section">
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video id="video2" muted playsinline preload="auto">
+                    <source src="https://yuting127.github.io/video4.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <div class="section ending">
+        <h1>停下來，一起思考環境對我們的重要</h1>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function initVideoControl(videoId, sectionId) {
+                const video = document.getElementById(videoId);
+                const section = document.getElementById(sectionId);
+                let isScrolling = false;
+
+                // Intersection Observer來啟動和停止影片播放
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            video.play();
+                        } else {
+                            video.pause();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                observer.observe(section);
+
+                function updateVideoProgress() {
+                    const sectionRect = section.getBoundingClientRect();
+                    const sectionTop = section.offsetTop;
+                    const maxScroll = section.offsetHeight - window.innerHeight;
+                    const scrollProgress = (window.scrollY - sectionTop) / maxScroll;
+                    const targetTime = scrollProgress * video.duration;
+
+                    // 平滑更新影片時間
+                    if (Math.abs(video.currentTime - targetTime) > 0.1) {
+                        video.currentTime = targetTime;
+                    }
+
+                    isScrolling = false;
+                }
+
+                // 使用節流的滾動事件，並使用 requestAnimationFrame 更新影片
+                window.addEventListener("scroll", function() {
+                    if (!isScrolling) {
+                        window.requestAnimationFrame(updateVideoProgress);
+                        isScrolling = true;
+                    }
+                });
+
+                video.addEventListener("loadedmetadata", updateVideoProgress);
+            }
+
+            // 初始化每個影片區段
+            initVideoControl('video1', 'video1-section');
+            initVideoControl('video2', 'video2-section');
+        });
+    </script>
+</body>
+</html>
+
