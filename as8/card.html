@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻翻卡題目測驗</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        .header-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        .main-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s ease;
+        }
+
+        .container {
+            width: 100%;
+            height: 400vh;
+            position: relative;
+            background-color: white;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            position: absolute;
+            top: 50vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .sticky-wrapper {
+            position: sticky;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .question {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .prompt {
+            font-size: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .card {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-front {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .card-back {
+            background-color: #4CAF50;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        @keyframes flipCard {
+            from {
+                transform: rotateY(0);
+            }
+            to {
+                transform: rotateY(180deg);
+            }
+        }
+
+        .flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <section class="header-section">
+        <h1 class="main-title fade-up">翻翻卡測驗</h1>
+    </section>
+    <div class="container">
+        <div class="sticky-wrapper">
+            <div class="question">請回答以下問題：</div>
+            <div class="prompt">你想清楚答案了嗎？</div>
+            <div class="cards-wrapper">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">2024美國總統大選由誰勝出？</div>
+                        <div class="card-back">川普</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">三色豆中哪種豆最好吃？</div>
+                        <div class="card-back">都不好吃</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">電影《飲食男女》的導演是誰？</div>
+                        <div class="card-back">李安</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $(window).scroll(function() {
+                const scrollPosition = $(window).scrollTop();
+                const windowHeight = $(window).height();
+                const containerStart = windowHeight; // 100vh後才開始計算container
+                
+                // 調整scrollPosition以考慮100vh的標題區
+                const adjustedScrollPosition = Math.max(0, scrollPosition - containerStart);
+                
+                // 在150vh處顯示提示文字
+                if (adjustedScrollPosition > windowHeight * 1.5) {
+                    $('.prompt').css('opacity', '1');
+                } else {
+                    $('.prompt').css('opacity', '0');
+                }
+                
+                // 在250vh處翻轉卡片
+                if (adjustedScrollPosition > windowHeight * 2.5) {
+                    $('.card-inner').css({
+                        'animation': 'flipCard 1s forwards'
+                    });
+                } else {
+                    $('.card-inner').css({
+                        'animation': 'none'
+                    });
+                }
+                
+                // 標題淡出效果
+                if (scrollPosition > windowHeight * 0.5) {
+                    $('.main-title').css({
+                        'opacity': Math.max(0, 1 - (scrollPosition - windowHeight * 0.5) / (windowHeight * 0.5))
+                    });
+                } else {
+                    $('.main-title').css('opacity', '1');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
