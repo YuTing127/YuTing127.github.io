@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海洋視差滾動</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+        .section {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1rem;
+            color: #f7f5f5;
+            text-align: center;
+            background-color: #1a1d1f;
+        }
+
+        .ocean-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgb(144, 181, 230) 30%,
+                #4b4be3 30%
+            );
+        }
+
+        .sun {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #FFD700;
+            border-radius: 50%;
+            top: 5%;
+            left: 5%;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+        }
+
+        .wave {
+            position: absolute;
+            top: 20%;
+            width: 100%;
+            height: 50px;
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+            top: 30%;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(173, 216, 230, 0.5);
+            border-radius: 50%;
+            transition: transform 0.3s ease-out;
+        }
+
+        .sea-creatures {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+            top: 30%;
+            pointer-events: none;
+        }
+
+        .turtle {
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            width: 80px;
+            height: 50px;
+            background: #0f4d2a;
+            border-radius: 25px;
+            transition: transform 0.3s ease-out;
+        }
+
+        .turtle::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background: #0f4d2a;
+            right: -10px;
+            top: 15px;
+            border-radius: 10px;
+        }
+
+        .fish {
+            position: absolute;
+            right: 10%;
+            top: 30%;
+            width: 70px;
+            height: 40px;
+            background: #FF6B6B;
+            clip-path: polygon(0 50%, 80% 100%, 80% 0);
+            transition: transform 0.3s ease-out;
+        }
+
+        .ships {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .ship {
+            position: absolute;
+            top: 22%;
+            width: 120px;
+            height: 40px;
+            background: #2f2c29;
+            transition: transform 0.3s ease-out;
+        }
+
+        .ship::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 40px;
+            width: 40px;
+            height: 30px;
+            background: #695e56;
+        }
+
+        .ship-left {
+            left: -200px;
+        }
+
+        .ship-right {
+            right: -300px;
+        }
+
+        .gray-circles {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+            top: 30%;
+            pointer-events: none;
+        }
+
+        .gray-circle {
+            position: absolute;
+            background: rgba(28, 25, 25, 0.5);
+            border-radius: 50%;
+            transition: transform 0.3s ease-out;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section title">
+        <h1>漂亮的海洋曾經是它們的家</h1>
+    </div>
+
+    <div class="section">
+        <div class="ocean-bg">
+            <div class="sun"></div>
+            <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none" width="100%" height="50px">
+                <path fill="#00008b" d="M0,50 C150,0 300,100 450,50 C600,0 750,100 900,50 C1050,0 1200,100 1440,50 V100 H0 V50Z"></path>
+            </svg>
+        </div>
+        <div class="bubbles" id="bubbles"></div>
+        <div class="sea-creatures">
+            <div class="turtle"></div>
+            <div class="fish"></div>
+        </div>
+    </div>
+
+    <div class="section title">
+        <h1>直到某天，它們都不見了……</h1>
+    </div>
+
+    <div class="section" id="ship-section">
+        <div class="ocean-bg">
+            <div class="sun"></div>
+            <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none" width="100%" height="50px">
+                <path fill="#00008b" d="M0,50 C150,0 300,100 450,50 C600,0 750,100 900,50 C1050,0 1200,100 1440,50 V100 H0 V50Z"></path>
+            </svg>
+        </div>
+        <div class="ships">
+            <div class="ship ship-left"></div>
+            <div class="ship ship-right"></div>
+        </div>
+        <div class="gray-circles" id="gray-circles"></div>
+    </div>
+
+    <div class="section title">
+        <h1>守護乾淨海洋，你我都有責任</h1>
+    </div>
+
+    <script>
+        // 創建泡泡
+        const bubblesContainer = document.getElementById('bubbles');
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 50 + 30;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = (i * 14 + 5) + '%';
+            bubble.style.top = (Math.random() * 50 + 10) + '%';
+            bubblesContainer.appendChild(bubble);
+        }
+
+        // 創建灰色圓形
+        const grayCirclesContainer = document.getElementById('gray-circles');
+        for (let i = 0; i < 200; i++) {
+            const circle = document.createElement('div');
+            circle.className = 'gray-circle';
+            const size = Math.random() * 40 + 20;
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.left = (Math.random() * 80 + 10) + '%';
+            circle.style.top = '0%'; // 初始位置在上方
+            grayCirclesContainer.appendChild(circle);
+        }
+
+        // 視差滾動效果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shipSection = document.getElementById('ship-section');
+            const shipSectionTop = shipSection.offsetTop;
+            const shipSectionHeight = shipSection.offsetHeight;
+
+            // 太陽的移動
+            document.querySelectorAll('.sun').forEach(sun => {
+                const speed = 0.2;
+                sun.style.transform = `translateX(${scrolled * speed}px)`;
+            });
+
+            // 泡泡的移動
+            document.querySelectorAll('.bubble').forEach((bubble, index) => {
+                const speed = 0.3;
+                const xOffset = Math.sin(scrolled * 0.002 + index) * 30;
+                bubble.style.transform = `translateX(${xOffset}px)`;
+            });
+
+            // 海洋生物的移動
+            const turtle = document.querySelector('.turtle');
+            const fish = document.querySelector('.fish');
+            if (turtle && fish) {
+                const speed = 0.5;
+                turtle.style.transform = `translateX(${scrolled * speed}px)`;
+                fish.style.transform = `translateX(${-scrolled * speed}px)`;
+            }
+
+            // 船的移動
+            const shipLeft = document.querySelector('.ship-left');
+            const shipRight = document.querySelector('.ship-right');
+            if (shipLeft && shipRight) {
+                const speed = 0.4;
+                shipLeft.style.transform = `translateX(${scrolled * speed}px)`;
+                shipRight.style.transform = `translateX(${-scrolled * speed}px)`;
+            }
+
+            // 灰色圓形的下落動畫
+            const circleScrolled = scrolled - shipSectionTop;
+            document.querySelectorAll('.gray-circle').forEach((circle, index) => {
+                // 只有當滾動到第四個section時才顯示和移動圓形
+                if (scrolled >= shipSectionTop && scrolled <= shipSectionTop + shipSectionHeight) {
+                    circle.style.opacity = '1';
+                    const baseSpeed = 0.8;
+                    const individualSpeed = baseSpeed + (index * 0.1);
+                    const translation = circleScrolled * individualSpeed;
+                    const swayAmount = Math.sin(circleScrolled * 0.002 + index) * 15;
+                    
+                    circle.style.transform = `
+                        translateY(${translation}px)
+                        translateX(${swayAmount}px)
+                    `;
+                } else {
+                    circle.style.opacity = '0';
+                    circle.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
